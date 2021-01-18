@@ -7,16 +7,29 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () {
+    int defaultCount;
+}
 
 @property NSInteger count;
+@property (nonatomic, copy) NSString *cString;
 
 @end
 
 @implementation ViewController
 
+- (void) testcString {
+    dispatch_queue_t queue = dispatch_queue_create("com.cc.CCAtomicDataProblem.0", DISPATCH_QUEUE_CONCURRENT);
+    for (int i = 0; i < self->defaultCount * self->defaultCount; i++) {
+        dispatch_async(queue, ^{
+            self.cString = [NSString stringWithFormat:@"cString test %d times", i + 1];
+            NSLog(@"%@", self.cString);
+        });
+    }
+}
+
 - (void) testCount: (int) loopCount {
-    int loop =  10000;
+    int loop = defaultCount;
     
     if (loopCount > loop) {
         loop = loopCount;
@@ -44,11 +57,17 @@
     });
 }
 
+- (void) loadingData {
+    defaultCount = 10000;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self testCount:10000];
+    [self loadingData];
+    
+    [self testCount:defaultCount];
 }
 
 
