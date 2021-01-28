@@ -18,6 +18,16 @@
 
 @implementation ViewController
 
+- (void) testShortString {
+    dispatch_queue_t queue = dispatch_queue_create("com.cc.CCAtomicDataProblem.0", DISPATCH_QUEUE_CONCURRENT);
+    for (int i = 0; i < self->defaultCount * self->defaultCount; i++) {
+        dispatch_async(queue, ^{
+            self.cString = [NSString stringWithFormat:@"%d", i + 1];
+            NSLog(@"%@", self.cString);
+        });
+    }
+}
+
 - (void) testcString {
     dispatch_queue_t queue = dispatch_queue_create("com.cc.CCAtomicDataProblem.0", DISPATCH_QUEUE_CONCURRENT);
     for (int i = 0; i < self->defaultCount * self->defaultCount; i++) {
@@ -67,7 +77,9 @@
     
     [self loadingData];
     
-    [self testCount:defaultCount];
+//    [self testCount:defaultCount];
+//    [self testcString];
+    [self testShortString];
 }
 
 
